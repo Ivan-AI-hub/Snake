@@ -24,10 +24,5 @@ namespace Scripts
                 rb.AddForce(new Vector2(x, y));
             }
         }
-
-        public float GetSpeed()
-        {
-            return _speed;
-        }
     }
 }
