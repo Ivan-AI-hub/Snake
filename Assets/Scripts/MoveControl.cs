@@ -1,61 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class MoveControl : MonoBehaviour
+namespace Scripts
 {
-    public Transform PlayerBrain;
-    public Transform PlayerSkin;
-    public GameObject Camera;
-
-    public float Speed;
-
-    private float _speedCamera;
-    private float _acceleration = 1;
-
-    private void Start()
+    public class MoveControl : MonoBehaviour
     {
-        _speedCamera = Speed / 100;
-    }
+        [SerializeField] private Transform _player;
+        [SerializeField] private GameObject _camera;
+        [SerializeField] private Rigidbody2D rb;
 
-    private void Update()
-    {
-        Camera.transform.position = Vector3.Lerp(Camera.transform.position, PlayerSkin.position - Vector3.forward , _speedCamera);
+        [SerializeField] private float _speed = 3f;
 
-        PlayerSkin.transform.position = Vector3.Lerp(PlayerSkin.position, PlayerBrain.position, _speedCamera);
-
-        if (Input.GetKey(KeyCode.W))
+        private void FixedUpdate()
         {
-            Move(Vector3.up);
+            Move();
         }
 
-        if (Input.GetKey(KeyCode.S))
+        private void Move()
         {
-            Move(Vector3.down);
+            if (Input.anyKey)
+            {
+                float x = Input.GetAxis("Horizontal") * _speed;
+                float y = Input.GetAxis("Vertical") * _speed;
+                rb.AddForce(new Vector2(x, y));
+            }
         }
 
-        if (Input.GetKey(KeyCode.D))
+        public float GetSpeed()
         {
-            Move(Vector3.right);
+            return _speed;
         }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            Move(Vector3.left);
-        }
-
-        if (Input.anyKey && _acceleration<2)
-        {
-            _acceleration += 0.1f * Time.deltaTime ;
-        }
-        else if (_acceleration > 1f)
-        {
-            _acceleration -= 0.5f ;
-        }
-    }
-
-    private void Move(Vector3 direction)
-    {
-        PlayerBrain.position += direction * Speed * _acceleration * Time.deltaTime;
     }
 }
