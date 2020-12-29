@@ -4,7 +4,9 @@ namespace Scripts {
 
     public class CameraMove : MonoBehaviour
     {
-        [SerializeField] private Transform _playerTransform;
+        [SerializeField] private MoveControl _hull;
+
+        [SerializeField] private Transform _tankTransform;
         [SerializeField] private Transform _selfTransform;
 
         [SerializeField] private float _speed;
@@ -12,12 +14,7 @@ namespace Scripts {
 
         private void FixedUpdate()
         {
-            Move(_playerTransform, _speed);
-        }
-
-        private void Move(Transform Object, float Speed)
-        {
-            _selfTransform.position = Vector3.Lerp(_selfTransform.position, Object.position + _offsetPosition, Speed * Time.deltaTime);
+            _hull.CameraMove(_selfTransform, _tankTransform, _speed, _offsetPosition);
         }
 
     }
