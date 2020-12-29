@@ -19,15 +19,14 @@ namespace Scripts
             }
         }
 
-        private GameObject CreateBullet()
+        private void CreateBullet()
         {
 
-            GameObject obj = (GameObject)Instantiate(_prefab, _parentTransform.position, Quaternion.identity);
+            GameObject obj = Instantiate(_prefab, _parentTransform.position, Quaternion.identity);
 
             obj.SetActive(false);
             _bullets.Add(obj);
 
-            return obj;
 
         }
 
