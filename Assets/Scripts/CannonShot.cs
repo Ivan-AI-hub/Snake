@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
 
-namespace Scripts 
+namespace Scripts
 {
     public class CannonShot : MonoBehaviour
     {
 
-        [SerializeField] private PullManager _pull;
-        [SerializeField] private Transform _tower;
-
+        private PullManager _pull;
+        
         private float Pause = 0;
+
+        private void Awake()
+        {
+            _pull = GameObject.FindGameObjectWithTag("Pull").GetComponent<PullManager>();
+        }
 
         public void Fire()
         {
@@ -19,8 +23,8 @@ namespace Scripts
                 if (newBullet != null)
                 {
 
-                    newBullet.transform.rotation = _tower.rotation;
-                    newBullet.transform.position = _tower.position;
+                    newBullet.transform.position = transform.position;
+                    newBullet.transform.rotation = transform.rotation;
 
                     newBullet.SetActive(true);
                 }

@@ -5,8 +5,6 @@ namespace Scripts
     public class BulletMove : MonoBehaviour
     {
 
-        [SerializeField] private GameObject _selfObject;
-
         [SerializeField] private float _speed;
 
         private void OnEnable()
@@ -16,12 +14,14 @@ namespace Scripts
 
         private void Hide()
         {
-            _selfObject.SetActive(false);
+            PullManager _pull = GameObject.FindGameObjectWithTag("Pull").GetComponent<PullManager>();
+
+            _pull.Hide(gameObject);
         }
 
         private void FixedUpdate()
         {
-            _selfObject.transform.Translate(0, _speed * Time.deltaTime, 0);
+            transform.Translate(new Vector3(0,_speed*Time.fixedDeltaTime));
         }
 
     }
