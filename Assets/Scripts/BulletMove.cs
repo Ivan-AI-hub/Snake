@@ -6,22 +6,18 @@ namespace Scripts
     {
 
         [SerializeField] private float _speed;
+        [SerializeField] private Rigidbody2D _rb;
 
-        private void OnEnable()
+        private void FixedUpdate()
         {
-            Invoke("Hide", 5f);
+            transform.Translate(new Vector3(0, _speed * Time.fixedDeltaTime));
         }
 
-        private void Hide()
+        private void OnCollisionEnter2D()
         {
             PullManager _pull = GameObject.FindGameObjectWithTag("Pull").GetComponent<PullManager>();
 
             _pull.Hide(gameObject);
-        }
-
-        private void FixedUpdate()
-        {
-            transform.Translate(new Vector3(0,_speed*Time.fixedDeltaTime));
         }
 
     }

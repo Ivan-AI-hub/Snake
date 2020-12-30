@@ -20,7 +20,7 @@ namespace Scripts
 
             TankMove(transform, _towerTransform, _moveSpeed, _rotateHullSpeed);
 
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKey(KeyCode.Mouse0))
             {
                 _cannon.Fire();
             }
@@ -34,9 +34,12 @@ namespace Scripts
 
                 Tank.Translate(0, y * Time.fixedDeltaTime, 0);
 
-                Tank.Rotate(0, 0, RotateHullSpeed * -x / 4);
+                if (y<0)
+                    Tank.Rotate(0, 0, RotateHullSpeed * x / 4);
+                else 
+                    Tank.Rotate(0, 0, RotateHullSpeed * -x / 4);
 
-                Tower.rotation.Normalize();
+            Tower.rotation.Normalize();
 
         }
 
