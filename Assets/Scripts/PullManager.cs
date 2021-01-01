@@ -5,43 +5,75 @@ namespace Scripts
 {
     public class PullManager : MonoBehaviour
     {
-        [SerializeField] private GameObject _prefab;
-        [SerializeField] private List<GameObject> _bullets = new List<GameObject>();
-        [SerializeField] private int _bulletCount = 10;
+        [SerializeField] private GameObject _prefabBulletCannon;
+        [SerializeField] private List<GameObject> _buletsCannon = new List<GameObject>();
+        [SerializeField] private int _bulletCannonCount = 10;
+
+        [SerializeField] private GameObject _prefabBulletMortal;
+        [SerializeField] private List<GameObject> _buletsMortar = new List<GameObject>();
+        [SerializeField] private int _bulletMortarCount = 10;
+
+        [SerializeField] private GameObject _prefabFuelFlamethrower;
+        [SerializeField] private List<GameObject> _fuelFlamethrower = new List<GameObject>();
+        private readonly int __fuelFlamethrowerCount = 1;
+
         [SerializeField] private bool _willGrow = false;
 
         private void Awake()
         {
-            for (int i = 0; i < _bulletCount; i++)
+
+            initialCreation(_fuelFlamethrower, _prefabFuelFlamethrower, __fuelFlamethrowerCount);
+            initialCreation(_buletsCannon, _prefabBulletCannon, _bulletCannonCount);
+            initialCreation(_buletsMortar, _prefabBulletMortal, _bulletMortarCount);
+        }
+
+        private void initialCreation(List<GameObject> NameList, GameObject Prefab, int Count)
+        {
+            for (int i = 0; i <Count; i++)
             {
-                CreateBullet();
+                CreateBullet(NameList, Prefab);
             }
         }
 
-        private void CreateBullet()
+        private void CreateBullet(List<GameObject> NameList, GameObject Prefab)
         {
 
-            GameObject obj = Instantiate(_prefab, transform.position, Quaternion.identity);
+            GameObject obj = Instantiate(Prefab, transform.position, Quaternion.identity);
 
             obj.SetActive(false);
-            _bullets.Add(obj);
+
+            NameList.Add(obj);
 
 
         }
 
-        public GameObject GetPulledObject()
+        public GameObject GetPulledObject(string GunName)
         {
-            for (int i = 0; i < _bullets.Count; i++)
+            if (GunName == "Canon")
+                return TakeAnalysis(_buletsCannon, _prefabBulletCannon);
+
+            else if (GunName == "Flamethrower")
+                return TakeAnalysis(_fuelFlamethrower, _prefabFuelFlamethrower);
+            
+            else if(GunName == "Mortal")
+                return TakeAnalysis(_buletsMortar, _prefabBulletMortal);
+
+            return null;
+        }
+
+        private GameObject TakeAnalysis(List<GameObject> NameList, GameObject Prefab)
+        {
+            for (int i = 0; i < NameList.Count; i++)
             {
-                if (!_bullets[i].activeSelf)
+                if (!NameList[i].activeSelf)
                 {
-                    return _bullets[i];
+                    return NameList[i];
                 }
             }
 
             if (_willGrow)
             {
-                CreateBullet();
+                CreateBullet(NameList, Prefab);
             }
 
             return null;

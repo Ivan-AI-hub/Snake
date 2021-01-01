@@ -6,7 +6,6 @@ namespace Scripts
     {
 
         [SerializeField] private float _speed;
-        [SerializeField] private Rigidbody2D _rb;
 
         private void FixedUpdate()
         {

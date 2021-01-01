@@ -6,8 +6,12 @@ namespace Scripts
     {
 
         [SerializeField] private CannonShot _cannon;
+        [SerializeField] private FlamethrowerShot _flamethrower;
+        [SerializeField] private MortalShot _mortal;
 
         [SerializeField] private Transform _towerTransform;
+
+        [SerializeField] private Transform _aim;
 
         [SerializeField] private float _rotateTowerSpeed;
         [SerializeField] private float _rotateHullSpeed;
@@ -16,13 +20,13 @@ namespace Scripts
 
         void FixedUpdate()
         {
-            ChangeDirection(_towerTransform, _rotateTowerSpeed);
-
+            //  ChangeDirection(_towerTransform, _rotateTowerSpeed);
+            AimControl(_aim, _rotateTowerSpeed);
             TankMove(transform, _towerTransform, _moveSpeed, _rotateHullSpeed);
 
             if (Input.GetKey(KeyCode.Mouse0))
             {
-                _cannon.Fire();
+                _mortal.Fire();
             }
         }
 
@@ -53,6 +57,13 @@ namespace Scripts
             aimDir = aimDir.normalized;
 
             Tower.up = Vector3.MoveTowards(Tower.up, aimDir, Speed * Time.fixedDeltaTime);
+        }
+
+        public void AimControl(Transform Aim, float Speed)
+        {
+            Vector3 aimTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            Aim.position = Vector3.MoveTowards(Aim.position, aimTarget + Vector3.forward, Speed * Time.fixedDeltaTime);
         }
     }
 }
