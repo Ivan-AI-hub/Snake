@@ -17,7 +17,7 @@ namespace Scripts
         [SerializeField] private float _rotateHullSpeed;
         [SerializeField] private float _moveSpeed;
 
-        private void Awake()
+        private void Start()
         {
             _aim.SetActive(false);
         }
@@ -36,8 +36,7 @@ namespace Scripts
                 transform.Rotate(0, 0, _rotateHullSpeed * -x / 4);
 
             _towerTransform.rotation.Normalize();
-            _aim.transform.rotation.Normalize();
-
+            _aim.transform.rotation = new Quaternion(0, 0, 0, _aim.transform.rotation.w);
         }
 
         public void ChangeDirection()

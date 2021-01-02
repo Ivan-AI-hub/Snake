@@ -64,7 +64,7 @@ namespace Scripts
         private void FlameControl()
         {
             _playerTank.ChangeDirection();
-            if (Input.GetKey(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Mouse0))
                 _flamethrower.Fire();
         }
 
