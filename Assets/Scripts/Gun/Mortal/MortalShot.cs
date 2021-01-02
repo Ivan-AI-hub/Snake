@@ -7,7 +7,7 @@ namespace Scripts
     {
         private PullManager _pull;
 
-        private float Pause = 0;
+        private float _pause = 0;
 
         private void Awake()
         {
@@ -16,7 +16,7 @@ namespace Scripts
 
         public void Fire()
         {
-            if (Pause <= 0)
+            if (_pause <= 0)
             {
                 GameObject newBullet = _pull.GetPulledObject("Mortal");
 
@@ -29,15 +29,15 @@ namespace Scripts
                     newBullet.SetActive(true);
                 }
 
-                Pause = 2f;
+                _pause = 2f;
             }
         }
 
         private void FixedUpdate()
         {
-            if (Pause > 0)
+            if (_pause > 0)
             {
-                Pause = Pause - 1 * Time.deltaTime;
+                _pause = _pause - 1 * Time.deltaTime;
             }
         }
 

@@ -25,6 +25,7 @@ namespace Scripts
             initialCreation(_fuelFlamethrower, _prefabFuelFlamethrower, __fuelFlamethrowerCount);
             initialCreation(_buletsCannon, _prefabBulletCannon, _bulletCannonCount);
             initialCreation(_buletsMortar, _prefabBulletMortal, _bulletMortarCount);
+
         }
 
         private void initialCreation(List<GameObject> NameList, GameObject Prefab, int Count)

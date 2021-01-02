@@ -11,59 +11,79 @@ namespace Scripts
 
         [SerializeField] private Transform _towerTransform;
 
-        [SerializeField] private Transform _aim;
+        [SerializeField] private GameObject _aim;
 
         [SerializeField] private float _rotateTowerSpeed;
         [SerializeField] private float _rotateHullSpeed;
         [SerializeField] private float _moveSpeed;
 
-
-        void FixedUpdate()
+        private void Awake()
         {
-            //  ChangeDirection(_towerTransform, _rotateTowerSpeed);
-            AimControl(_aim, _rotateTowerSpeed);
-            TankMove(transform, _towerTransform, _moveSpeed, _rotateHullSpeed);
+            _aim.SetActive(false);
+        }
 
-            if (Input.GetKey(KeyCode.Mouse0))
+        public void TankMove()
+        {
+
+            float x = Input.GetAxis("Horizontal") * _moveSpeed;
+            float y = Input.GetAxis("Vertical") * _moveSpeed;
+
+            transform.Translate(0, y * Time.fixedDeltaTime, 0);
+
+            if (y < 0)
+                transform.Rotate(0, 0, _rotateHullSpeed * x / 4);
+            else
+                transform.Rotate(0, 0, _rotateHullSpeed * -x / 4);
+
+            _towerTransform.rotation.Normalize();
+            _aim.transform.rotation.Normalize();
+
+        }
+
+        public void ChangeDirection()
+        {
+            _aim.SetActive(false);
+
+            Vector3 aimTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 aimDir = aimTarget - _towerTransform.position;
+
+            aimDir.z = _towerTransform.up.z;
+            aimDir = aimDir.normalized;
+
+            _towerTransform.up = Vector3.MoveTowards(_towerTransform.up, aimDir, _rotateTowerSpeed * Time.fixedDeltaTime);
+        }
+
+        public void AimControl()
+        {
+
+            if (_aim.activeSelf)
             {
-                _mortal.Fire();
+                Vector3 aimTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                _aim.transform.position = Vector3.MoveTowards(_aim.transform.position, aimTarget + Vector3.forward, _rotateTowerSpeed * Time.fixedDeltaTime);
+            }
+            else
+            {
+                _aim.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition); 
+                _aim.SetActive(true);
             }
         }
 
-        public void TankMove(Transform Tank, Transform Tower, float Speed, float RotateHullSpeed)
+        #region Getters
+        public CannonShot GetCannon()
         {
-
-                float x = Input.GetAxis("Horizontal") * Speed;
-                float y = Input.GetAxis("Vertical") * Speed;
-
-                Tank.Translate(0, y * Time.fixedDeltaTime, 0);
-
-                if (y<0)
-                    Tank.Rotate(0, 0, RotateHullSpeed * x / 4);
-                else 
-                    Tank.Rotate(0, 0, RotateHullSpeed * -x / 4);
-
-            Tower.rotation.Normalize();
-
+            return _cannon;
         }
 
-        public void ChangeDirection(Transform Tower, float Speed)
+        public MortalShot GetMortal()
         {
-
-            Vector3 aimTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 aimDir = aimTarget - Tower.position;
-
-            aimDir.z = Tower.up.z;
-            aimDir = aimDir.normalized;
-
-            Tower.up = Vector3.MoveTowards(Tower.up, aimDir, Speed * Time.fixedDeltaTime);
+            return _mortal;
         }
 
-        public void AimControl(Transform Aim, float Speed)
+        public FlamethrowerShot GetFlamethrower()
         {
-            Vector3 aimTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            Aim.position = Vector3.MoveTowards(Aim.position, aimTarget + Vector3.forward, Speed * Time.fixedDeltaTime);
+            return _flamethrower;
         }
+        #endregion
     }
 }

@@ -9,13 +9,9 @@ namespace Scripts
         private GameObject Aim;
         private Vector3 _aimPosition;
 
-        private void Awake()
-        {
-            Aim = GameObject.FindGameObjectWithTag("Aim");
-        }
-
         private void OnEnable()
         {
+            Aim = GameObject.FindGameObjectWithTag("Aim");
             _aimPosition = Aim.transform.position;
         }
 
