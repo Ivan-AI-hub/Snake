@@ -1,32 +1,10 @@
-﻿using UnityEngine;
-
-namespace Scripts
+﻿namespace Scripts
 {
-    public class FlamethrowerShot : MonoBehaviour
+    public class FlamethrowerShot : Weapon
     {
-        private PullManager _pull;
-
-        private void Awake()
+        public override void Fire()
         {
-            _pull = GameObject.FindGameObjectWithTag("Pull").GetComponent<PullManager>();
+            ShotTemplate();
         }
-
-        public void Fire()
-        {
-
-                GameObject newBullet = _pull.GetPulledObject("Flamethrower");
-
-                if (newBullet != null)
-                {
-
-                    newBullet.transform.position = transform.position;
-                    newBullet.transform.rotation = transform.rotation;
-
-                    newBullet.SetActive(true);
-                }
-
-        }
-
-
     }
 }

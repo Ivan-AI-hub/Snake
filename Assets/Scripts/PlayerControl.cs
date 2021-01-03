@@ -1,23 +1,35 @@
-﻿using UnityEngine;
-
-namespace Scripts
+﻿namespace Scripts
 {
+    using UnityEngine;
+
     public class PlayerControl : MonoBehaviour
     {
         [SerializeField] private TankControl _playerTank;
         [SerializeField] private GameObject _canvas;
 
-        private CannonShot _cannon;
-        private MortalShot _mortal;
-        private FlamethrowerShot _flamethrower;
+        private int numberWeapon = 0;
 
-        private int NumberWeapon = 1;
-        private void Awake()
+        private bool towerRotate = true;
+
+        #region Select
+        public void CannonSelect()
         {
-            _cannon = _playerTank.GetCannon();
-            _mortal = _playerTank.GetMortal();
-            _flamethrower = _playerTank.GetFlamethrower();
+            numberWeapon = 0;
+            towerRotate = true;
         }
+
+        public void MortalSelect()
+        {
+            numberWeapon = 1;
+            towerRotate = false;
+        }
+
+        public void FlameSelect()
+        {
+            numberWeapon = 2;
+            towerRotate = true;
+        }
+        #endregion
 
         private void FixedUpdate()
         {
@@ -29,60 +41,19 @@ namespace Scripts
             {
                 _canvas.SetActive(false);
 
-
                 _playerTank.TankMove();
 
-                if (NumberWeapon == 1)
+                _playerTank.WeaponFire(numberWeapon);
+
+                if (towerRotate)
                 {
-                    CannonControl();
+                    _playerTank.ChangeDirection();
                 }
-                else if (NumberWeapon == 2)
+                else
                 {
-                    MortalControl();
-                }
-                else if (NumberWeapon == 3)
-                {
-                    FlameControl();
+                    _playerTank.AimControl();
                 }
             }
         }
-
-        private void CannonControl()
-        {
-            _playerTank.ChangeDirection();
-            if (Input.GetKey(KeyCode.Mouse0))
-                _cannon.Fire();
-        }
-
-        private void MortalControl()
-        {
-            _playerTank.AimControl();
-            if (Input.GetKey(KeyCode.Mouse0))
-                _mortal.Fire();
-        }
-
-        private void FlameControl()
-        {
-            _playerTank.ChangeDirection();
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-                _flamethrower.Fire();
-        }
-
-        #region Select
-        public void CannonSelect()
-        {
-            NumberWeapon = 1;
-        }
-
-        public void MortalSelect()
-        {
-            NumberWeapon = 2;
-        }
-
-        public void FlameSelect()
-        {
-            NumberWeapon = 3;
-        }
-        #endregion
     }
 }

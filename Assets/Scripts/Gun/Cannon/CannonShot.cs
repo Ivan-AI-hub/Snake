@@ -1,45 +1,10 @@
-﻿using UnityEngine;
-
-namespace Scripts
+﻿namespace Scripts
 {
-    public class CannonShot : MonoBehaviour
+    public class CannonShot : Weapon
     {
-
-        private PullManager _pull;
-        
-        private float _pause = 0;
-
-        private void Awake()
+        public override void Fire()
         {
-            _pull = GameObject.FindGameObjectWithTag("Pull").GetComponent<PullManager>();
+            DesigShots(Deley);
         }
-
-        public void Fire()
-        {
-            if (_pause <= 0)
-            {
-                GameObject newBullet = _pull.GetPulledObject("Canon");
-
-                if (newBullet != null)
-                {
-
-                    newBullet.transform.position = transform.position;
-                    newBullet.transform.rotation = transform.rotation;
-
-                    newBullet.SetActive(true);
-                }
-
-                _pause = 0.5f;
-            }
-        }
-
-        private void FixedUpdate()
-        {
-            if (_pause > 0)
-            {
-                _pause = _pause - 1 * Time.deltaTime;
-            }
-        }
-
     }
 }

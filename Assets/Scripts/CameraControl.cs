@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-
-namespace Scripts
+﻿namespace Scripts
 {
+    using UnityEngine;
 
     public class CameraControl : MonoBehaviour
     {
@@ -15,11 +14,9 @@ namespace Scripts
             CameraMove(transform, _playerTransform, _speed, _offsetPosition);
         }
 
-        private void CameraMove(Transform Camera, Transform Tank, float Speed, Vector3 OffsetPosition)
+        private void CameraMove(Transform camera, Transform tank, float speed, Vector3 offsetPosition)
         {
-            Camera.position = Vector3.Lerp(Camera.position, Tank.position + OffsetPosition, Speed * Time.deltaTime);
+            camera.position = Vector3.Lerp(camera.position, tank.position + offsetPosition, speed * Time.deltaTime);
         }
-
     }
-
 }

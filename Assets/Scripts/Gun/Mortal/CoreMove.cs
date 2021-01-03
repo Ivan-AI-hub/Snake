@@ -1,31 +1,31 @@
-﻿using UnityEngine;
-
-namespace Scripts
+﻿namespace Scripts
 {
-    public class CoreMove : MonoBehaviour
-    {
+    using UnityEngine;
 
-        [SerializeField] private float _speed;
-        private GameObject Aim;
+    public class CoreMove : Bulets
+    {
         private Vector3 _aimPosition;
+
+        protected override void Move()
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _aimPosition, Speed * Time.fixedDeltaTime);
+        }
+
+        protected override bool DestructionCondition()
+        {
+            if (transform.position == _aimPosition)
+            {
+                Hide = true;
+            }
+
+            return Hide;
+        }
 
         private void OnEnable()
         {
-            Aim = GameObject.FindGameObjectWithTag("Aim");
-            _aimPosition = Aim.transform.position;
+            GameObject aim = GameObject.Find("Aim");
+
+            _aimPosition = aim.transform.position;
         }
-
-        private void FixedUpdate()
-        {
-            transform.position = Vector3.MoveTowards(transform.position, _aimPosition, _speed * Time.fixedDeltaTime);
-
-            if (transform.position == _aimPosition)
-            {
-                PullManager _pull = GameObject.FindGameObjectWithTag("Pull").GetComponent<PullManager>();
-
-                _pull.Hide(gameObject);
-            }
-        }
-
     }
 }
