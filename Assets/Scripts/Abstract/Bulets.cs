@@ -8,7 +8,9 @@
 
         private bool _hide = false;
 
-        private PullManager _pull;
+        private DistributorLinks _distributorLinks;
+
+        protected DistributorLinks DistributorLinks => _distributorLinks;
 
         protected float Speed => _speed;
 
@@ -24,7 +26,7 @@
 
         private void Awake()
         {
-            _pull = FindObjectOfType<PullManager>();
+            _distributorLinks = FindObjectOfType<DistributorLinks>();
         }
 
         private void FixedUpdate()
@@ -39,7 +41,7 @@
 
         private void Delete()
         {
-            _pull.Hide(gameObject);
+            _distributorLinks.Pull.Hide(gameObject);
             _hide = false;
         }
     }

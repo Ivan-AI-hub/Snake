@@ -4,8 +4,8 @@
 
     public class PlayerControl : MonoBehaviour
     {
-        [SerializeField] private TankControl _playerTank;
-        [SerializeField] private GameObject _canvas;
+        [SerializeField] private Tank _playerTank;
+        [SerializeField] private DistributorLinks _distributorLinks;
 
         private int numberWeapon = 0;
 
@@ -35,25 +35,25 @@
         {
             if (Input.GetKey(KeyCode.Tab))
             {
-                _canvas.SetActive(true);
+                _distributorLinks.UI.SelectionInterface(true);
             }
             else
             {
-                _canvas.SetActive(false);
+                _distributorLinks.UI.SelectionInterface(false);
 
-                _playerTank.TankMove();
+                _playerTank.Move();
 
                 _playerTank.WeaponFire(numberWeapon);
 
                 if (towerRotate)
                 {
-                    _playerTank.ChangeDirection();
+                    _playerTank.ChangeDirectionTower();
                 }
                 else
                 {
                     _playerTank.AimControl();
                 }
             }
-        }
+        } 
     }
 }

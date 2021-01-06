@@ -23,9 +23,11 @@
 
         private void OnEnable()
         {
-            GameObject aim = GameObject.Find("Aim");
+            Transform _aim = DistributorLinks
+                                            .Aim
+                                            .transform;
 
-            _aimPosition = aim.transform.position;
+            _aimPosition = _aim.position;
         }
     }
 }

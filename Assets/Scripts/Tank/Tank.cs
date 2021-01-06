@@ -3,21 +3,20 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class TankControl : MonoBehaviour
+    public class Tank : MonoBehaviour
     {
         [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
 
         [SerializeField] private Transform _towerTransform;
 
-        [SerializeField] private GameObject _aim;
+        private GameObject _aim;
 
         [SerializeField] private float _aimSpeed;
-
         [SerializeField] private float _rotateTowerSpeed;
         [SerializeField] private float _rotateHullSpeed;
         [SerializeField] private float _moveSpeed;
 
-        public void TankMove()
+        public void Move()
         {
             float x = Input.GetAxis("Horizontal") * _moveSpeed;
             float y = Input.GetAxis("Vertical") * _moveSpeed;
@@ -37,7 +36,7 @@
             _aim.transform.rotation = new Quaternion(0, 0, 0, _aim.transform.rotation.w);
         }
 
-        public void ChangeDirection()
+        public void ChangeDirectionTower()
         {
             _aim.SetActive(false);
 
@@ -67,7 +66,8 @@
 
         public void WeaponFire(int index)
         {
-            if (Input.GetKey(KeyCode.Mouse0))
+            _weapons[index].ChekAmmo();
+            if (Input.GetAxis("Fire1") > 0)
             {
                 _weapons[index].Fire();
             }
@@ -75,6 +75,10 @@
 
         private void Start()
         {
+            DistributorLinks _distributorLinks = FindObjectOfType<DistributorLinks>();
+
+            _aim = _distributorLinks.Aim;
+
             _aim.SetActive(false);
         }
     }
