@@ -23,9 +23,7 @@
 
         private void OnEnable()
         {
-            Transform _aim = DistributorLinks
-                                            .Aim
-                                            .transform;
+            Transform _aim = DistributorLinks.Aim.transform;
 
             _aimPosition = _aim.position;
         }

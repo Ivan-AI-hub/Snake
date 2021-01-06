@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class Weapon : MonoBehaviour
+    public abstract class Weapon : MonoBehaviour
     {
         [SerializeField] private float _delay;
         [SerializeField] private float _maxAmmoCount;
@@ -20,30 +20,33 @@
 
         private float _timeBetweenAction;
 
-        public void Fire()
+        private GraphicWeapons _graphicWeapons;
+
+        protected GraphicWeapons GraphicWeapons
         {
-            if (_timeBetweenAction <= 0 && _ammoCount > 0)
-            {
-                GameObject newBullet = GetBullet();
-
-                if (newBullet != null)
-                {
-                    newBullet.transform.position = transform.position;
-                    newBullet.transform.rotation = transform.rotation;
-
-                    newBullet.SetActive(true);
-
-                    _ammoCount--;
-
-                    _timeBetweenAction = _delay;
-
-                    if (_delay == 0)
-                    {
-                        newBullet.transform.SetParent(transform, true);
-                    }
-                }
-            }
+            set { _graphicWeapons = value; }
         }
+
+        protected DistributorLinks DistributorLinks => _distributorLinks;
+
+        protected float TimeAction
+        {
+            get { return _timeBetweenAction; }
+            set { _timeBetweenAction = value; }
+        }
+
+        protected float Delay => _delay;
+
+        protected float AmmoCount
+        {
+            get { return _ammoCount; }
+            set { _ammoCount = value; }
+        }
+
+
+        public abstract void Fire();
+
+        protected abstract void SelectGraphicWeapon();
 
         public void ChekAmmo()
         {
@@ -73,17 +76,21 @@
             _distributorLinks.Pull.InitialCreation(_bulets, _prefabBullet, _bulletCount);
 
             _ammoCount = _maxAmmoCount;
+
+            SelectGraphicWeapon();
         }
 
-        private void FixedUpdate()
+        public void Controll()
         {
             if (_timeBetweenAction > 0)
             {
                 _timeBetweenAction -= Time.deltaTime;
             }
+
+            _graphicWeapons.Movement();
         }
 
-        private GameObject GetBullet()
+        protected GameObject GetBullet()
         {
             return _distributorLinks.Pull.GetPulledObject(_bulets, _prefabBullet);
         }

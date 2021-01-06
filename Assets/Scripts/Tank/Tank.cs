@@ -9,10 +9,6 @@
 
         [SerializeField] private Transform _towerTransform;
 
-        private GameObject _aim;
-
-        [SerializeField] private float _aimSpeed;
-        [SerializeField] private float _rotateTowerSpeed;
         [SerializeField] private float _rotateHullSpeed;
         [SerializeField] private float _moveSpeed;
 
@@ -33,53 +29,20 @@
             }
 
             _towerTransform.rotation.Normalize();
-            _aim.transform.rotation = new Quaternion(0, 0, 0, _aim.transform.rotation.w);
         }
 
-        public void ChangeDirectionTower()
-        {
-            _aim.SetActive(false);
-
-            Vector3 aimTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 aimDir = aimTarget - _towerTransform.position;
-
-            aimDir.z = _towerTransform.up.z;
-            aimDir = aimDir.normalized;
-
-            _towerTransform.up = Vector3.MoveTowards(_towerTransform.up, aimDir, _rotateTowerSpeed * Time.fixedDeltaTime);
-        }
-
-        public void AimControl()
-        {
-            if (_aim.activeSelf)
-            {
-                Vector3 aimTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-                _aim.transform.position = Vector3.MoveTowards(_aim.transform.position, aimTarget + Vector3.forward, _aimSpeed * Time.fixedDeltaTime);
-            }
-            else
-            {
-                _aim.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                _aim.SetActive(true);
-            }
-        }
-
-        public void WeaponFire(int index)
+        public void WeaponControl(int index)
         {
             _weapons[index].ChekAmmo();
+
+            _weapons[index].Controll();
+
             if (Input.GetAxis("Fire1") > 0)
             {
                 _weapons[index].Fire();
             }
         }
 
-        private void Start()
-        {
-            DistributorLinks _distributorLinks = FindObjectOfType<DistributorLinks>();
 
-            _aim = _distributorLinks.Aim;
-
-            _aim.SetActive(false);
-        }
     }
 }
