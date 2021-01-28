@@ -6,6 +6,7 @@
 
     public abstract class Weapon : MonoBehaviour
     {
+        private bool flag;
         [SerializeField] private float _delay;
         [SerializeField] private float _maxAmmoCount;
         [SerializeField] private float _reloadingTime;
@@ -14,85 +15,81 @@
         [SerializeField] private int _bulletCount;
         [SerializeField] private List<GameObject> _bulets = new List<GameObject>();
 
-        private float _ammoCount;
-
-        private DistributorLinks _distributorLinks;
-
-        private float _timeBetweenAction;
-
         private GraphicWeapons _graphicWeapons;
+        private PullManager _pull;
+        private UIManager _uI;
 
-        protected GraphicWeapons GraphicWeapons
+        protected float Delay { get => _delay; }
+        protected float AmmoCount { get; set; }
+        protected float TimeAction { get; set; }
+
+        protected GraphicWeapons GraphicWeapons { set => _graphicWeapons = value; }
+        protected Tower Tower { get; set; }
+        protected Aim Aim { get; set; }
+
+        private void Initialized(Tower tower, Aim aim, PullManager pull, UIManager uIManager)
         {
-            set { _graphicWeapons = value; }
+            Tower = tower;
+            Aim = aim;
+            _pull = pull;
+            _uI = uIManager;
         }
 
-        protected DistributorLinks DistributorLinks => _distributorLinks;
-
-        protected float TimeAction
+        private void Awake()
         {
-            get { return _timeBetweenAction; }
-            set { _timeBetweenAction = value; }
-        }
+            DistributorLinks distributorLinks = FindObjectOfType<DistributorLinks>();
 
-        protected float Delay => _delay;
+            Initialized(distributorLinks.Tower,
+                        distributorLinks.Aim,
+                        distributorLinks.Pull,
+                        distributorLinks.UI);
 
-        protected float AmmoCount
-        {
-            get { return _ammoCount; }
-            set { _ammoCount = value; }
-        }
+            _pull.InitialCreation(_bulets, _prefabBullet, _bulletCount);
 
+            AmmoCount = _maxAmmoCount;
 
-        public abstract void Fire();
-
-        protected abstract void SelectGraphicWeapon();
-
-        public void ChekAmmo()
-        {
-            if (_ammoCount > 0)
-            {
-                _distributorLinks.UI.SetTextAmmo(_ammoCount.ToString());
-            }
-            else
-            {
-                _distributorLinks.UI.SetTextAmmo("  Reloading...");
-
-                StartCoroutine(Reloading());
-            }
+            SelectGraphicWeapon();
         }
 
         private IEnumerator Reloading()
         {
             yield return new WaitForSeconds(_reloadingTime);
 
-            _ammoCount = _maxAmmoCount;
+            AmmoCount = _maxAmmoCount;
         }
 
-        private void Awake()
+        public void ChekAmmo()
         {
-            _distributorLinks = FindObjectOfType<DistributorLinks>();
-
-            _distributorLinks.Pull.InitialCreation(_bulets, _prefabBullet, _bulletCount);
-
-            _ammoCount = _maxAmmoCount;
-
-            SelectGraphicWeapon();
+            if (AmmoCount > 0)
+            {
+                _uI.SetTextAmmo(AmmoCount.ToString());
+                flag = true;
+            }
+            else if(flag)
+            {
+                _uI.SetTextAmmo("  Reloading...");
+                flag = false;
+                StartCoroutine(Reloading());
+            }
         }
 
         public void Controll()
         {
-            if (_timeBetweenAction > 0)
+            if (TimeAction > 0)
             {
-                _timeBetweenAction -= Time.deltaTime;
+                TimeAction -= Time.deltaTime;
             }
 
             _graphicWeapons.Movement();
         }
 
+        public abstract void Fire();
+
         protected GameObject GetBullet()
         {
-            return _distributorLinks.Pull.GetPulledObject(_bulets, _prefabBullet);
+            return _pull.GetPulledObject(_bulets, _prefabBullet);
         }
+
+        protected abstract void SelectGraphicWeapon();
     }
 }

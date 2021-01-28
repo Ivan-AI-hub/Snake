@@ -18,13 +18,15 @@
             {
                 transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                VisibilityChange(true);
+                SetVisibility(true);
             }
         }
 
-        public void VisibilityChange(bool value)
+        public void SetVisibility(bool value)
         {
             gameObject.SetActive(value);
+
+            gameObject.transform.SetParent(null);
         }
     }
 }

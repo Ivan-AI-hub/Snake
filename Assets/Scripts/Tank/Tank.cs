@@ -5,30 +5,39 @@
 
     public class Tank : MonoBehaviour
     {
+        [SerializeField] private GameObject _tower;
+        [SerializeField] private Aim _aim;
+
         [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
 
         [SerializeField] private Transform _towerTransform;
+        [SerializeField] private Rigidbody2D _rb;
 
         [SerializeField] private float _rotateHullSpeed;
         [SerializeField] private float _moveSpeed;
+        [SerializeField] private float _hp;
+
+        public Tower Tower => _tower.GetComponent<Tower>();
+        public Aim Aim => _aim;
 
         public void Move()
         {
-            float x = Input.GetAxis("Horizontal") * _moveSpeed;
-            float y = Input.GetAxis("Vertical") * _moveSpeed;
+            float x = Input.GetAxis("Horizontal") * _rotateHullSpeed;
+            float y = Input.GetAxis("Vertical") * _moveSpeed * 14;
 
-            transform.Translate(0, y * Time.fixedDeltaTime, 0);
+            _rb.AddRelativeForce(new Vector2(0, y));
 
-            if (y < 0)
+            if (y < 0 && x != 0)
             {
-                transform.Rotate(0, 0, _rotateHullSpeed * x / 4);
+                _rb.transform.Rotate(new Vector3(0, 0, x));
             }
-            else
+            else if (x != 0)
             {
-                transform.Rotate(0, 0, _rotateHullSpeed * -x / 4);
+                _rb.transform.Rotate(new Vector3(0, 0, -x));
             }
 
-            _towerTransform.rotation.Normalize();
+            _tower.transform.rotation.Normalize();
+            _aim.transform.position.Normalize();
         }
 
         public void WeaponControl(int index)
@@ -40,6 +49,19 @@
             if (Input.GetAxis("Fire1") > 0)
             {
                 _weapons[index].Fire();
+            }
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.transform.GetComponent<Bulets>())
+            {
+                _hp -= collision.transform.GetComponent<Bulets>().Damage;
+
+                if (_hp <= 0)
+                {
+                    gameObject.SetActive(false);
+                }
             }
         }
 

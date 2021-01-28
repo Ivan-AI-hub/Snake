@@ -10,7 +10,7 @@
             {
                 GameObject newBullet = GetBullet();
 
-                if (newBullet != null)
+                if ((object)newBullet != null)
                 {
                     newBullet.transform.position = transform.position;
                     newBullet.transform.rotation = transform.rotation;
@@ -27,7 +27,7 @@
 
         protected override void SelectGraphicWeapon()
         {
-            GraphicWeapons = DistributorLinks.Aim;
+            GraphicWeapons = Aim;
         }
     }
 }

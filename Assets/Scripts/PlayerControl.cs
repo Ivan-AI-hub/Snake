@@ -4,8 +4,8 @@
 
     public class PlayerControl : MonoBehaviour
     {
-        [SerializeField] private Tank _playerTank;
-        [SerializeField] private DistributorLinks _distributorLinks;
+        private Tank _playerTank;
+        private UIManager _uI;
 
         private int numberWeapon = 0;
 
@@ -26,15 +26,22 @@
         }
         #endregion
 
+        private void Awake()
+        {
+            DistributorLinks _distributorLinks = FindObjectOfType<DistributorLinks>();
+            _uI = _distributorLinks.UI;
+            _playerTank = _distributorLinks.PlayerTank;
+        }
+
         private void FixedUpdate()
         {
             if (Input.GetKey(KeyCode.Tab))
             {
-                _distributorLinks.UI.SelectionInterface(true);
+                _uI.SelectionInterface(true);
             }
             else
             {
-                _distributorLinks.UI.SelectionInterface(false);
+                _uI.SelectionInterface(false);
 
                 _playerTank.Move();
 

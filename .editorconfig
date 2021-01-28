@@ -1,0 +1,4 @@
+﻿[*.{cs,vb}]
+
+# IDE0041: Использовать флажок "is NULL"
+dotnet_diagnostic.IDE0041.severity = none

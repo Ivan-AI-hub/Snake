@@ -4,19 +4,14 @@
 
     public class DistributorLinks : MonoBehaviour
     {
-        [SerializeField] private Tower _tower;
-        [SerializeField] private Aim _aim;
         [SerializeField] private PullManager _pull;
         [SerializeField] private UIManager _uIManager;
+        [SerializeField] private Tank _playerTank;
 
-        public Tower Tower => _tower;
-
-        public Aim Aim => _aim;
-
+        public Tank PlayerTank => _playerTank;
+        public Tower Tower => _playerTank.Tower;
+        public Aim Aim => _playerTank.Aim;
         public PullManager Pull => _pull;
-
         public UIManager UI => _uIManager;
-
-
     }
 }

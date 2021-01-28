@@ -4,11 +4,16 @@
 
     public class CameraControl : MonoBehaviour
     {
-        [SerializeField] private Transform _playerTransform;
+        [SerializeField] private float _speed = 8;
+        [SerializeField] private Vector3 _offsetPosition = new Vector3(0, 0, -1);
 
-        [SerializeField] private float _speed;
-        [SerializeField] private Vector3 _offsetPosition;
+        private Transform _playerTransform;
 
+        private void Awake()
+        {
+            DistributorLinks _distributorLinks = FindObjectOfType<DistributorLinks>();
+            _playerTransform = _distributorLinks.PlayerTank.transform;
+        }
         private void FixedUpdate()
         {
             CameraMove(transform, _playerTransform, _speed, _offsetPosition);

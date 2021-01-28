@@ -5,20 +5,14 @@
     public abstract class Bulets : MonoBehaviour
     {
         [SerializeField] private float _speed;
-
-        private bool _hide = false;
-
+        [SerializeField] private float _damage;
         private DistributorLinks _distributorLinks;
 
         protected DistributorLinks DistributorLinks => _distributorLinks;
-
         protected float Speed => _speed;
+        protected bool Hide { get; set; }
 
-        protected bool Hide
-        {
-            get { return _hide; }
-            set { _hide = value; }
-        }
+        public float Damage => _damage;
 
         protected abstract void Move();
 
@@ -42,7 +36,7 @@
         private void Delete()
         {
             _distributorLinks.Pull.Hide(gameObject);
-            _hide = false;
+            Hide = false;
         }
     }
 }
