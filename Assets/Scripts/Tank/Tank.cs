@@ -7,6 +7,7 @@
     {
         [SerializeField] private GameObject _tower;
         [SerializeField] private Aim _aim;
+        [SerializeField] private Transform _healthBar;
 
         [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
 
@@ -56,15 +57,21 @@
         {
             if (collision.transform.GetComponent<Bulets>())
             {
-                _hp -= collision.transform.GetComponent<Bulets>().Damage;
-
-                if (_hp <= 0)
-                {
-                    gameObject.SetActive(false);
-                }
+                float damage = collision.transform.GetComponent<Bulets>().Damage;
+                ChekHealth(damage);
             }
         }
 
+        private void ChekHealth(float damage)
+        {
+            _healthBar.localScale = new Vector3(_healthBar.localScale.x * (1 - damage / _hp), _healthBar.localScale.y, _healthBar.localScale.z);
+            _hp -= damage;
+
+            if (_hp <= 0)
+            {
+                gameObject.SetActive(false);
+            }
+        }
 
     }
 }

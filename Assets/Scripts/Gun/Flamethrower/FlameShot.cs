@@ -12,7 +12,7 @@
 
                 if ((object)newBullet != null)
                 {
-                    newBullet.transform.position = transform.position;
+                    newBullet.transform.position = transform.position - Vector3.forward;
                     newBullet.transform.rotation = transform.rotation;
 
                     newBullet.transform.SetParent(transform);

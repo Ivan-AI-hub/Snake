@@ -4,9 +4,11 @@
 
     public class BuletMove : Bulets
     {
+        [SerializeField] private Rigidbody2D _rb;
+
         protected override void Move()
         {
-            transform.Translate(new Vector3(0, Speed * Time.fixedDeltaTime));
+            gameObject.transform.Translate(new Vector3(0, Speed * Time.fixedDeltaTime));
         }
 
         protected override bool DestructionCondition()
