@@ -43,7 +43,9 @@
             {
                 _uI.SelectionInterface(false);
 
-                _playerTank.Move();
+                float x = Input.GetAxis("Horizontal") ;
+                float y = Input.GetAxis("Vertical") ;
+                _playerTank.Move(x,y);
 
                 _playerTank.WeaponControl(numberWeapon);
             }

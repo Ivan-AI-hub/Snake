@@ -21,10 +21,10 @@
         public Tower Tower => _tower.GetComponent<Tower>();
         public Aim Aim => _aim;
 
-        public void Move()
+        public void Move(float x, float y)
         {
-            float x = Input.GetAxis("Horizontal") * _rotateHullSpeed;
-            float y = Input.GetAxis("Vertical") * _moveSpeed * 14;
+            x *=  _rotateHullSpeed;
+            y *=  _moveSpeed * 14;
 
             _rb.AddRelativeForce(new Vector2(0, y));
 
